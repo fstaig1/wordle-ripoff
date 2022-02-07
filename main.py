@@ -62,11 +62,11 @@ def guessWord():
             letterCheck(word=guess)
 
 
-def letterCheck(word):
+def letterCheck(word):  # TODO make this
     return True
 
 
-def winGame(guessNum):
+def winGame(guessNum):  # TODO make this
     print("You Win %s/6" % guessNum)
 
 
