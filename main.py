@@ -41,15 +41,33 @@ def initGame():
 # user guessing
 def guessWord():
     for guessNum in range(1, 7):
+
         valid = False
+
         while valid is False:
             print("\nGuess #%s." % guessNum)
             print("/ %s /" % generateWord())  # TODO remove
+
             guess = input("> ").lower()
+
             if guess in WORD_LIST:
                 valid = True
             else:
                 print("enter a valid 5 letter word")
+
+        if guess == currentWord:
+            winGame(guessNum=guessNum)
+            break
+        else:
+            letterCheck(word=guess)
+
+
+def letterCheck(word):
+    return True
+
+
+def winGame(guessNum):
+    print("You Win %s/6" % guessNum)
 
 
 # main
@@ -59,5 +77,6 @@ def main():
 
 
 main()
+
 
 input("pause debugger :)")
