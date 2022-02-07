@@ -1,0 +1,9 @@
+name: flake8
+on: [push, pull_request]
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: pip install flake8==3.8.0
+      - uses: TrueBrain/actions-flake8@v2
