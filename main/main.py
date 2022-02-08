@@ -1,27 +1,29 @@
 import random as r
-import os
+from os import system
 
 
 # function to let me easily clear the screen
 def clear():
-    os.system("cls")
+    system("cls")
 
 
 # constants to store file locations
-WORD_FILE = "wordle-ripoff\\data\\sgb-words.txt"
+WORD_FILE = "main\\data\\sgb-words.txt"
 
 
 # constants to store word list(ik they're technically not constants cos i instantly edit them but they never change after that)
 WORD_LIST = []
 
 # admin test vars
-ADMIN_WORD = "wheat"
+ENABLE_ADMIN_WORD = False
+ADMIN_WORD = "WHEAT"
 
 
 # generate word lists
 with(open(WORD_FILE) as file):
     for line in file:
         WORD_LIST.append(line.split("\n")[0].split(" ")[0])
+        NULL
 
 
 # pick word from answer list
@@ -32,10 +34,12 @@ def generateWord():
 # initialise game stuff idk yet
 def initGame():
     global currentWord
-    if not ADMIN_WORD:
+    if not ENABLE_ADMIN_WORD:
         currentWord = generateWord()
+        print("#############  CURRENT WORD - %s  ###############" % currentWord.upper())
     else:
         currentWord = ADMIN_WORD
+        print("#############  ADMIN WORD - %s  ###############" % ADMIN_WORD.upper())
 
 
 # user guessing
@@ -79,4 +83,4 @@ def main():
 main()
 
 
-input("pause debugger :)")
+input("\n\npause debugger :)")
