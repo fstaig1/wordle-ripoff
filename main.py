@@ -9,7 +9,7 @@ def clear():
 
 
 # constants to store file locations
-WORD_FILE = "main\\data\\sgb-words.txt"
+WORD_FILE = "data\\sgb-words.txt"
 
 
 # constant to store list of words
@@ -66,7 +66,7 @@ def initGame():
 
 # user guessing
 def guessWord():
-    scores=[]
+    scores = []
     for guessNum in range(1, 7):
         valid = False
 
@@ -83,7 +83,6 @@ def guessWord():
                 valid = True
             else:
                 print("enter a valid 5 letter word")
-        print("'%s'" % guess)
         score = wordCheck(word=guess)
 
         scores.append(score)
@@ -155,8 +154,9 @@ def loseGame(scores):  # TODO make this
 
 # main
 def main():
-    initGame()
-    guessWord()
+    while True:
+        initGame()
+        guessWord()
 
 
 main()
