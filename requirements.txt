@@ -1,5 +1,3 @@
-pip
-logging
 jinja2
 flask
 werkzeug

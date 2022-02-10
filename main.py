@@ -1,7 +1,6 @@
 import random as r
 from os import system
 import re
-from models import Letter
 
 
 # function to let me easily clear the screen
@@ -9,24 +8,14 @@ def clear():
     system("cls")
 
 
-# constants to store file locations
-WORD_FILE = "data\\sgb-words.txt"
-
-
-# constant to store list of words
+# constants
 WORD_LIST = []
-with(open(WORD_FILE, "r") as file):
+with(open("data\\sgb-words.txt", "r") as file):
     for line in file:
-        WORD_LIST.append(line.split("\n")[0].split(" ")[0])
-
-
-# constant for alphabet + generating letters dict
-ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
+        WORD_LIST.append(line.strip("\n"))
 global letters
-letters = {}
-for i in ALPHABET:
-    letters.update({i: -1})
-print(letters)
+letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -1, 'i': -1, 'j': -1, 'k': -1, 'l': -1, 'm': -1,
+           'n': -1, 'o': -1, 'p': -1, 'q': -1, 'r': -1, 's': -1, 't': -1, 'u': -1, 'v': -1, 'w': -1, 'x': -1, 'y': -1, 'z': -1}
 
 
 # admin test vars
@@ -87,7 +76,12 @@ def guessWord():
             if guessNum > 1:
                 for i in scores:
                     print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
-
+                unusedLetters = []
+                for i in "abcdefghijklmnopqrstuvwxyz":
+                    if letters[i] == -1:
+                        unusedLetters.append(i.upper())
+                print("Unused letters -\n %s" % str(unusedLetters)[1:-1])
+                    
             guess = input("> ").lower()
 
             if guess in WORD_LIST:
@@ -124,7 +118,6 @@ def wordCheck(word):
             adminPrint("%s in %s" % (letter, currentWord))
             winPos = [char.start() for char in re.finditer(letter, currentWord)]
             guessPos = [char.start() for char in re.finditer(letter, word)]
-            adminPrint("pos %s" % (winPos))
             for i in winPos:
                 adminPrint("word[i] %s currentWord[num] %s" % (word[i], currentWord[num]))
                 # check if letter in exact pos
@@ -145,14 +138,15 @@ def wordCheck(word):
                 else:
                     score = 1
         list.append(score)
-        letterCheck(word, score)
+    letterCheck(word, list)
     return [list, word]
 
 
+
 # letter check
-def letterCheck(word, score):
-    for i in word:
-        letters.update({i: score[word.find(i)]})
+def letterCheck(word, list):
+    for i in range(0, len(list)):
+        letters.update({word[i] : list[i]})
     adminPrint("letters updated %s" % letters)
 
 
@@ -160,14 +154,14 @@ def letterCheck(word, score):
 def winGame(scores):  # TODO make this
     print("\n\nYou Win!\n%s/6 guesses." % len(scores))
     for i in scores:
-        print(emojiPrint(i[0]), i[1].upper())
+        print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
 
 
 # function to lose the game
 def loseGame(scores):  # TODO make this
     print("\n\nYou Lose.\nX/6 guesses.")
     for i in scores:
-        print(emojiPrint(i[0]), i[1].upper())
+        print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
     print("\nThe correct word was %s." % currentWord)
 
 
