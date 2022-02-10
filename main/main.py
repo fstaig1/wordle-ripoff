@@ -91,6 +91,8 @@ def guessWord():
         if score == [2, 2, 2, 2, 2]:
             winGame(guessNum=guessNum)
             break
+    if score != [2, 2, 2, 2, 2]:
+        loseGame()
 
 
 def wordCheck(word):
@@ -141,6 +143,12 @@ def wordCheck(word):
 # function to win the game
 def winGame(guessNum):  # TODO make this
     print("\n\nYou Win!\n%s/6 guesses." % guessNum)
+
+
+# function to lose the game
+def loseGame():  # TODO make this
+    print("\n\nYou Lose.\nX/6 guesses.")
+    print("\nThe correct word was %s." % currentWord)
 
 
 # main
