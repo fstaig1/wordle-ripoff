@@ -1,6 +1,7 @@
 import random as r
 from os import system
 import re
+from models import Letter
 
 
 # function to let me easily clear the screen
@@ -17,6 +18,16 @@ WORD_LIST = []
 with(open(WORD_FILE, "r") as file):
     for line in file:
         WORD_LIST.append(line.split("\n")[0].split(" ")[0])
+
+
+# constant for alphabet + generating letters dict
+ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
+global letters
+letters = {}
+for i in ALPHABET:
+    letters.update({i: -1})
+print(letters)
+
 
 # admin test vars
 ENABLE_ADMIN_WORD = False
@@ -75,7 +86,7 @@ def guessWord():
             adminPrint("/ %s /" % generateWord())
             if guessNum > 1:
                 for i in scores:
-                    print(emojiPrint(i[0]), i[1].upper())
+                    print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
 
             guess = input("> ").lower()
 
@@ -134,7 +145,15 @@ def wordCheck(word):
                 else:
                     score = 1
         list.append(score)
+        letterCheck(word, score)
     return [list, word]
+
+
+# letter check
+def letterCheck(word, score):
+    for i in word:
+        letters.update({i: score[word.find(i)]})
+    adminPrint("letters updated %s" % letters)
 
 
 # function to win the game
