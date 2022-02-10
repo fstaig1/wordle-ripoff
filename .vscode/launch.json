@@ -8,7 +8,7 @@
             "name": "main",
             "type": "python",
             "request": "launch",
-            "program": "main/main.py",
+            "program": "main\\main.py",
             "console": "integratedTerminal"
         }
     ]

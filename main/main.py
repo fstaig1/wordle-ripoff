@@ -23,7 +23,6 @@ ADMIN_WORD = "WHEAT"
 with(open(WORD_FILE) as file):
     for line in file:
         WORD_LIST.append(line.split("\n")[0].split(" ")[0])
-        NULL
 
 
 # pick word from answer list
@@ -63,11 +62,13 @@ def guessWord():
             winGame(guessNum=guessNum)
             break
         else:
-            letterCheck(word=guess)
+            print(wordCheck(word=guess))
 
 
-def letterCheck(word):  # TODO make this
-    return True
+def wordCheck(word):  # TODO make this
+    for i in word:
+        print(i)
+    return "TBD"
 
 
 def winGame(guessNum):  # TODO make this
