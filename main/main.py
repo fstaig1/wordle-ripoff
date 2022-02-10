@@ -12,11 +12,14 @@ def clear():
 WORD_FILE = "main\\data\\sgb-words.txt"
 
 
-# constants to store word list(ik they're technically not constants cos i instantly edit them but they never change after that)
+# constant to store list of words
 WORD_LIST = []
+with(open(WORD_FILE, "r") as file):
+    for line in file:
+        WORD_LIST.append(line.split("\n")[0].split(" ")[0])
 
 # admin test vars
-ENABLE_ADMIN_WORD = True
+ENABLE_ADMIN_WORD = False
 ADMIN_WORD = "skill"
 ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
@@ -29,7 +32,7 @@ def adminPrint(string):
 
 
 def emojiPrint(list):
-    """function to print scores as emojis
+    """function to return scores as emojis
 
     Args:
         list list[int]: list of integers equal to either 0, 1 or 2
@@ -40,15 +43,9 @@ def emojiPrint(list):
         string = ""
         for i in list:
             string += emojis[i]
-        print(string)
+        return(string)
     else:
-        print(list)
-
-
-# generate word lists
-with(open(WORD_FILE, "r") as file):
-    for line in file:
-        WORD_LIST.append(line.split("\n")[0].split(" ")[0])
+        return(list)
 
 
 # pick word from answer list
@@ -69,13 +66,16 @@ def initGame():
 
 # user guessing
 def guessWord():
+    scores=[]
     for guessNum in range(1, 7):
-
         valid = False
 
         while not valid:
             print("\nGuess #%s." % guessNum)
             adminPrint("/ %s /" % generateWord())
+            if guessNum > 1:
+                for i in scores:
+                    print(emojiPrint(i[0]), i[1].upper())
 
             guess = input("> ").lower()
 
@@ -83,16 +83,14 @@ def guessWord():
                 valid = True
             else:
                 print("enter a valid 5 letter word")
-
+        print("'%s'" % guess)
         score = wordCheck(word=guess)
 
-        emojiPrint(score)
-
-        if score == [2, 2, 2, 2, 2]:
-            winGame(guessNum=guessNum)
+        scores.append(score)
+        if score[0] == [2, 2, 2, 2, 2]:
+            winGame(scores)
             break
-    if score != [2, 2, 2, 2, 2]:
-        loseGame()
+    loseGame(scores)
 
 
 def wordCheck(word):
@@ -137,17 +135,21 @@ def wordCheck(word):
                 else:
                     score = 1
         list.append(score)
-    return list
+    return [list, word]
 
 
 # function to win the game
-def winGame(guessNum):  # TODO make this
-    print("\n\nYou Win!\n%s/6 guesses." % guessNum)
+def winGame(scores):  # TODO make this
+    print("\n\nYou Win!\n%s/6 guesses." % len(scores))
+    for i in scores:
+        print(emojiPrint(i[0]), i[1].upper())
 
 
 # function to lose the game
-def loseGame():  # TODO make this
+def loseGame(scores):  # TODO make this
     print("\n\nYou Lose.\nX/6 guesses.")
+    for i in scores:
+        print(emojiPrint(i[0]), i[1].upper())
     print("\nThe correct word was %s." % currentWord)
 
 
