@@ -1,15 +1,9 @@
 from random import randrange
-from os import system
 from re import finditer
 from csv import reader
 from pyperclip import copy
 
 # TODO add docstrings to all functions
-
-
-# function to let me easily clear the screen
-def clear():
-    system("cls")
 
 
 # constants
@@ -27,13 +21,20 @@ ENABLE_EMOJI_PRINTS = True
 
 
 # function to print if admin prints are enabled
-def adminPrint(string):
+def adminPrint(data):
+    """Print data when ENABLE_ADMIN_PRINTS is True
+
+    Args:
+        data (any): any data to get printed
+    """
     if ENABLE_ADMIN_PRINTS:
-        print(string)
+        print(data)
 
 
 def emojiPrint(list):
     """function to return scores as emojis
+    returns string of emojis if ENABLE_EMOJI_PRINTS == True
+    returns list if False
 
     Args:
         list list[int]: list of integers equal to either 0, 1 or 2
@@ -51,12 +52,15 @@ def emojiPrint(list):
 
 # pick word from answer list
 def generateWord():
+    """Returns random word from WORD_LIST
+    """
     return(WORD_LIST[randrange(0, len(WORD_LIST) - 1)])
 
 
 # initialise game stuff idk yet
 def initGame():
-
+    """Ititialises letters dict, and generates currentWord
+    """
     # globals
     global letters
     global currentWord
@@ -72,6 +76,8 @@ def initGame():
 
 # user guessing
 def guessWord():
+    """Runs the main game
+    """
     scores = []
     win = False
     for guessNum in range(1, 7):
@@ -114,8 +120,7 @@ def wordCheck(word):
         word (str): 5 letter string
 
     Returns:
-        list[int]: 5 ints which refer to each letters score -
-                        2 = green, 1 = yellow, 0 = grey
+        list[ list[int], str ]: 2d list contains, list which contains 5 ints, 5 char string
     """
     list = []
 
@@ -154,6 +159,12 @@ def wordCheck(word):
 
 # letter check
 def letterCheck(word, list):
+    """updates state of letters in word with data in list
+
+    Args:
+        word (str): string
+        list (list[int]): list of integers
+    """
     for i in range(0, len(list)):
         if list[i] > letters[word[i]]:
             letters.update({word[i]: list[i]})
@@ -162,6 +173,11 @@ def letterCheck(word, list):
 
 # function to win the game
 def winGame(scores):
+    """outputs score when user wins
+
+    Args:
+        scores (list[list[int], str]): 2d list contains, list which contains 5 ints, 5 char string
+    """
     print("\n\nYou Win!\n%s/6 guesses." % len(scores))
     share = "Worble %s/6" % len(scores)
     for i in scores:
@@ -172,6 +188,11 @@ def winGame(scores):
 
 # function to lose the game
 def loseGame(scores):
+    """outputs score when user loses
+
+    Args:
+        scores (list[list[int], str]): 2d list contains, list which contains 5 ints, 5 char string
+    """
     print("\n\nYou Lose.\nX/6 guesses.")
     share = "Worble X/6"
     for i in scores:
@@ -183,6 +204,12 @@ def loseGame(scores):
 
 
 def saveScore(data, win):
+    """write game scores to file
+
+    Args:
+        data (list[list[int], str]): 2d list contains, list which contains 5 ints, 5 char string
+        win (bool): boolean refering to win/lose
+    """
     with (open("scores.txt", "a") as file):
         fileWrite = ""
         for i in data:
