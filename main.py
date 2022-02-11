@@ -4,16 +4,19 @@ from re import finditer
 from csv import reader
 from pyperclip import copy
 
+# TODO add docstrings to all functions
+
+
 # function to let me easily clear the screen
 def clear():
     system("cls")
 
 
 # constants
-with open("data\data.csv") as file:
+with open("data\\data.csv") as file:
     read = reader(file)
     for i in read:
-        WORD_LIST=i
+        WORD_LIST = i
 
 
 # admin test vars
@@ -53,7 +56,7 @@ def generateWord():
 
 # initialise game stuff idk yet
 def initGame():
-    
+
     # globals
     global letters
     global currentWord
@@ -84,7 +87,7 @@ def guessWord():
                     if letters[i] == -1:
                         unusedLetters.append(i.upper())
                 print("Unused letters -\n %s" % str(unusedLetters)[1:-1])
-                    
+
             guess = input("> ").lower()
 
             if guess in WORD_LIST:
@@ -102,7 +105,6 @@ def guessWord():
     else:
         loseGame(scores)
     saveScore(scores, win)
-    
 
 
 def wordCheck(word):
@@ -154,12 +156,12 @@ def wordCheck(word):
 def letterCheck(word, list):
     for i in range(0, len(list)):
         if list[i] > letters[word[i]]:
-            letters.update({word[i] : list[i]})
+            letters.update({word[i]: list[i]})
     adminPrint("letters updated %s" % letters)
 
 
 # function to win the game
-def winGame(scores):  # TODO make this
+def winGame(scores):
     print("\n\nYou Win!\n%s/6 guesses." % len(scores))
     share = "Worble %s/6" % len(scores)
     for i in scores:
@@ -169,7 +171,7 @@ def winGame(scores):  # TODO make this
 
 
 # function to lose the game
-def loseGame(scores):  # TODO make this
+def loseGame(scores):
     print("\n\nYou Lose.\nX/6 guesses.")
     share = "Worble X/6"
     for i in scores:
@@ -187,9 +189,9 @@ def saveScore(data, win):
             fileWrite += str(i[0])[1:-1]
             fileWrite += " | %s" % i[1]
             fileWrite += "\n"
-        if not win: 
-            x = "X" 
-        else: 
+        if not win:
+            x = "X"
+        else:
             x = len(data)
         fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord, x)
         file.write(str(fileWrite))
