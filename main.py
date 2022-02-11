@@ -10,15 +10,10 @@ def clear():
 
 
 # constants
-WORD_LIST = []
 with open("data\data.csv") as file:
     read = reader(file)
     for i in read:
         WORD_LIST=i
-
-global letters
-letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -1, 'i': -1, 'j': -1, 'k': -1, 'l': -1, 'm': -1,
-           'n': -1, 'o': -1, 'p': -1, 'q': -1, 'r': -1, 's': -1, 't': -1, 'u': -1, 'v': -1, 'w': -1, 'x': -1, 'y': -1, 'z': -1}
 
 
 # admin test vars
@@ -58,7 +53,12 @@ def generateWord():
 
 # initialise game stuff idk yet
 def initGame():
+    
+    # globals
+    global letters
     global currentWord
+    letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -1, 'i': -1, 'j': -1, 'k': -1, 'l': -1, 'm': -1,
+               'n': -1, 'o': -1, 'p': -1, 'q': -1, 'r': -1, 's': -1, 't': -1, 'u': -1, 'v': -1, 'w': -1, 'x': -1, 'y': -1, 'z': -1}
     if not ENABLE_ADMIN_WORD:
         currentWord = generateWord()
         adminPrint("#############  CURRENT WORD - %s  #############" % currentWord.upper())
@@ -101,14 +101,8 @@ def guessWord():
         winGame(scores)
     else:
         loseGame(scores)
-    with (open("scores.txt", "a") as file):
-        fileWrite = ""
-        for i in scores:
-            fileWrite += str(i[0])[1:-1]
-            fileWrite += " %s" % i[1]
-            fileWrite += "\n"
-        fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord, len(scores[0]))
-        file.write(str(fileWrite))
+    saveScore(scores, win)
+    
 
 
 def wordCheck(word):
@@ -156,11 +150,11 @@ def wordCheck(word):
     return [list, word]
 
 
-
 # letter check
 def letterCheck(word, list):
     for i in range(0, len(list)):
-        letters.update({word[i] : list[i]})
+        if list[i] > letters[word[i]]:
+            letters.update({word[i] : list[i]})
     adminPrint("letters updated %s" % letters)
 
 
@@ -185,6 +179,20 @@ def loseGame(scores):  # TODO make this
     copy(share)
     print("\nThe correct word was %s." % currentWord)
 
+
+def saveScore(data, win):
+    with (open("scores.txt", "a") as file):
+        fileWrite = ""
+        for i in data:
+            fileWrite += str(i[0])[1:-1]
+            fileWrite += " | %s" % i[1]
+            fileWrite += "\n"
+        if not win: 
+            x = "X" 
+        else: 
+            x = len(data)
+        fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord, x)
+        file.write(str(fileWrite))
 
 
 # main
