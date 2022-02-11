@@ -2,6 +2,7 @@ from random import randrange
 from os import system
 from re import finditer
 from csv import reader
+from pyperclip import copy
 
 # function to let me easily clear the screen
 def clear():
@@ -22,7 +23,7 @@ letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -
 
 # admin test vars
 ENABLE_ADMIN_WORD = False
-ADMIN_WORD = "stern"
+ADMIN_WORD = "issue"
 ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
@@ -82,7 +83,6 @@ def guessWord():
                 for i in "abcdefghijklmnopqrstuvwxyz":
                     if letters[i] == -1:
                         unusedLetters.append(i.upper())
-                        del letters[i]
                 print("Unused letters -\n %s" % str(unusedLetters)[1:-1])
                     
             guess = input("> ").lower()
@@ -167,16 +167,24 @@ def letterCheck(word, list):
 # function to win the game
 def winGame(scores):  # TODO make this
     print("\n\nYou Win!\n%s/6 guesses." % len(scores))
+    share = "Worble %s/6" % len(scores)
     for i in scores:
         print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
+        share += "\n%s %s" % (emojiPrint(i[0]), i[1].upper())
+    copy(share)
 
 
 # function to lose the game
 def loseGame(scores):  # TODO make this
     print("\n\nYou Lose.\nX/6 guesses.")
+    share = "Worble X/6"
     for i in scores:
         print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
+        share += "\n%s %s" % (emojiPrint(i[0]), i[1].upper())
+    share += "\nThe correct word was %s." % currentWord
+    copy(share)
     print("\nThe correct word was %s." % currentWord)
+
 
 
 # main
