@@ -20,8 +20,8 @@ letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -
 
 # admin test vars
 ENABLE_ADMIN_WORD = True
-ADMIN_WORD = "night"
-ENABLE_ADMIN_PRINTS = False
+ADMIN_WORD = "stern"
+ENABLE_ADMIN_PRINTS = True
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -132,7 +132,7 @@ def wordCheck(word):
             for i in winPos:
                 adminPrint("word[i] %s currentWord[num] %s" % (word[i], currentWord[num]))
                 # check if letter in exact pos
-                if word[i] == currentWord[num]:
+                if word[num] == currentWord[num]:
                     adminPrint("%s in %s at pos %s" % (letter, currentWord, i))
                     score = 2
                     break
