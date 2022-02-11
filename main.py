@@ -19,8 +19,8 @@ letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = False
-ADMIN_WORD = "skill"
+ENABLE_ADMIN_WORD = True
+ADMIN_WORD = "night"
 ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
@@ -67,9 +67,9 @@ def initGame():
 # user guessing
 def guessWord():
     scores = []
+    win = False
     for guessNum in range(1, 7):
         valid = False
-
         while not valid:
             print("\nGuess #%s." % guessNum)
             adminPrint("/ %s /" % generateWord())
@@ -92,9 +92,20 @@ def guessWord():
 
         scores.append(score)
         if score[0] == [2, 2, 2, 2, 2]:
-            winGame(scores)
+            win = True
             break
-    loseGame(scores)
+    if win:
+        winGame(scores)
+    else:
+        loseGame(scores)
+    with (open("scores.txt", "a") as file):
+        fileWrite = ""
+        for i in scores:
+            fileWrite += str(i[0])[1:-1]
+            fileWrite += " %s" % i[1]
+            fileWrite += "\n"
+        fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord, len(scores[0]))
+        file.write(str(fileWrite))
 
 
 def wordCheck(word):
