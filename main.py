@@ -1,7 +1,7 @@
-import random as r
+from random import randrange
 from os import system
-import re
-
+from re import finditer
+from csv import reader
 
 # function to let me easily clear the screen
 def clear():
@@ -10,18 +10,20 @@ def clear():
 
 # constants
 WORD_LIST = []
-with(open("data\\sgb-words.txt", "r") as file):
-    for line in file:
-        WORD_LIST.append(line.strip("\n"))
+with open("data\data.csv") as file:
+    read = reader(file)
+    for i in read:
+        WORD_LIST=i
+
 global letters
 letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -1, 'i': -1, 'j': -1, 'k': -1, 'l': -1, 'm': -1,
            'n': -1, 'o': -1, 'p': -1, 'q': -1, 'r': -1, 's': -1, 't': -1, 'u': -1, 'v': -1, 'w': -1, 'x': -1, 'y': -1, 'z': -1}
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = True
+ENABLE_ADMIN_WORD = False
 ADMIN_WORD = "stern"
-ENABLE_ADMIN_PRINTS = True
+ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -50,7 +52,7 @@ def emojiPrint(list):
 
 # pick word from answer list
 def generateWord():
-    return(WORD_LIST[r.randrange(0, len(WORD_LIST) - 1)])
+    return(WORD_LIST[randrange(0, len(WORD_LIST) - 1)])
 
 
 # initialise game stuff idk yet
@@ -80,6 +82,7 @@ def guessWord():
                 for i in "abcdefghijklmnopqrstuvwxyz":
                     if letters[i] == -1:
                         unusedLetters.append(i.upper())
+                        del letters[i]
                 print("Unused letters -\n %s" % str(unusedLetters)[1:-1])
                     
             guess = input("> ").lower()
@@ -127,8 +130,8 @@ def wordCheck(word):
         # check if letter in word
         if letter in currentWord:
             adminPrint("%s in %s" % (letter, currentWord))
-            winPos = [char.start() for char in re.finditer(letter, currentWord)]
-            guessPos = [char.start() for char in re.finditer(letter, word)]
+            winPos = [char.start() for char in finditer(letter, currentWord)]
+            guessPos = [char.start() for char in finditer(letter, word)]
             for i in winPos:
                 adminPrint("word[i] %s currentWord[num] %s" % (word[i], currentWord[num]))
                 # check if letter in exact pos
