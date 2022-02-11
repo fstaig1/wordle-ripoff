@@ -14,8 +14,8 @@ with open("data\\data.csv") as file:
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = False
-ADMIN_WORD = "issue"
+ENABLE_ADMIN_WORD = True
+ADMIN_WORD = "mealy"
 ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
@@ -146,7 +146,7 @@ def wordCheck(word):
                     score = 1
                     break
                 # checks if letter exists in word but in different pos when theres only 1 in word
-                elif len(guessPos) > 1 and word[i] != currentWord[num]:
+                elif len(guessPos) > 1 and word[i] != currentWord[num] and letter not in currentWord:
                     adminPrint("%s found but not at pos %s (dupes)" % (letter, i))
                     score = 0
                     break
