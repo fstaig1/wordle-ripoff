@@ -15,9 +15,9 @@ with open("data\\data.csv") as file:
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = True
+ENABLE_ADMIN_WORD = False
 ADMIN_WORD = "ahhhh"
-ENABLE_ADMIN_PRINTS = True
+ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -90,10 +90,14 @@ def guessWord():
                 for i in scores:
                     print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
                 unusedLetters = []
+                validLetters = []
                 for i in "abcdefghijklmnopqrstuvwxyz":
                     if letters[i] == -1:
                         unusedLetters.append(i.upper())
+                    elif letters[i] > 0:
+                        validLetters.append(i.upper())
                 print("Unused letters -\n %s" % str(unusedLetters)[1:-1])
+                print("Valid letters  -\n %s" % (str(validLetters)[1:-1]))
 
             guess = input("> ").lower()
 
@@ -184,7 +188,6 @@ def yellowCheck(word, list):
                             updateLetter(word, guessPos[j], value)
                 elif len(guessPos) <= len(winPos):
                     list[i] = 1
-                    continue
                 elif len(guessPos) > len(winPos):
                     x = len(guessPos) - len(winPos)
                     for j in range(x):
