@@ -170,7 +170,7 @@ def yellowCheck(word, list):
 
             if len(guessPos) > 1:
                 adminPrint("parse")
-                if  len(winPos) == 1:
+                if len(winPos) == 1:
                     if letters[word[i]] == 2:
                         list[i] = 0
                         updateLetter(word, i, 0)
@@ -185,6 +185,10 @@ def yellowCheck(word, list):
                 elif len(guessPos) <= len(winPos):
                     list[i] = 1
                     continue
+                elif len(guessPos) > len(winPos):
+                    x = len(guessPos) - len(winPos)
+                    for j in range(x):
+                        list[j] = 1
                 else:
                     list[i] = 0
             else:
