@@ -7,7 +7,7 @@ from pyperclip import copy
 # TODO add comments
 # TODO add web app for UI
 
-# constants
+# create wordlist from file
 with open("data\\data.csv") as file:
     read = reader(file)
     for i in read:
@@ -15,9 +15,9 @@ with open("data\\data.csv") as file:
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = False
+ENABLE_ADMIN_WORD = True
 ADMIN_WORD = "ahhhh"
-ENABLE_ADMIN_PRINTS = False
+ENABLE_ADMIN_PRINTS = True
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -131,10 +131,6 @@ def wordCheck(word):
 
     list = yellowCheck(word, list)
 
-    for i in list:
-        if i == -1:
-            i = 0
-
     return [list, word]
 
 
@@ -142,9 +138,8 @@ def wordCheck(word):
 def greyCheck(word, list):
     adminPrint("###### grey check ###### %s" % list)
     for i in range(len(word)):
-        adminPrint("word[i] %s : currentWord %s" % (word[i], currentWord))
+        adminPrint(" word[i] : %s \n currentWord %s" % (word[i], currentWord))
         if word[i] not in currentWord:
-            adminPrint("parse")
             list[i] = 0
             updateLetter(word, i, 0)
     return list
@@ -155,7 +150,7 @@ def greenCheck(word, list):
     adminPrint("###### green check ###### %s" % list)
     for i in range(len(word)):
         if list[i] == -1:
-            adminPrint(" word[i] %s \n currentWord[i] %s \n" % (word[i], currentWord[i]))
+            adminPrint(" word[i] :  %s \n currentWord[i] : %s \n" % (word[i], currentWord[i]))
             if word[i] == currentWord[i]:
                 list[i] = 2
                 updateLetter(word, i, 2)
@@ -170,22 +165,28 @@ def yellowCheck(word, list):
 
             winPos = [char.start() for char in finditer(word[i], currentWord)]
             guessPos = [char.start() for char in finditer(word[i], word)]
-            adminPrint("\n win pos %s \n guess pos%s" % (winPos, guessPos))
-            adminPrint(" word[i] %s \n currentWord[i] %s \n i %s \n" % (word[i], currentWord[i], i))
+            adminPrint("\n win pos : %s \n guess pos : %s" % (winPos, guessPos))
+            adminPrint(" word[i] : %s \n currentWord[i] %s \n i : %s \n" % (word[i], currentWord[i], i))
 
             if len(guessPos) > 1:
                 adminPrint("parse")
-                if letters[word[i]] == 2:
-                    list[i] = 0
-                    updateLetter(word, i, 0)
+                if  len(winPos) == 1:
+                    if letters[word[i]] == 2:
+                        list[i] = 0
+                        updateLetter(word, i, 0)
+                    else:
+                        for j in range(len(guessPos)):
+                            if j == 0:
+                                value = 1
+                            else:
+                                value = 0
+                            list[guessPos[j]] = value
+                            updateLetter(word, guessPos[j], value)
+                elif len(guessPos) <= len(winPos):
+                    list[i] = 1
+                    continue
                 else:
-                    for j in range(len(guessPos)):
-                        if j == 0:
-                            value = 1
-                        else:
-                            value = 0
-                        list[guessPos[j]] = value
-                        updateLetter(word, guessPos[j], value)
+                    list[i] = 0
             else:
                 list[i] = 1
                 updateLetter(word, i, 1)
@@ -195,9 +196,12 @@ def yellowCheck(word, list):
 
 # letter update
 def updateLetter(word, pos, value):
+    adminPrint("\n value : %s \n word[pos] : %s \n" % (value, word[pos]))
     if value > letters[word[pos]]:
         letters.update({word[pos]: value})
-    adminPrint("letter %s updated. \n " % (word[pos]))
+        adminPrint("letter %s updated. \n " % (word[pos]))
+    else:
+        adminPrint("letter %s not updated.\n" % (word[pos]))
 
 
 # function to win the game
@@ -227,9 +231,9 @@ def loseGame(scores):
     for i in scores:
         print("%s %s" % (emojiPrint(i[0]), i[1].upper()))
         share += "\n%s %s" % (emojiPrint(i[0]), i[1].upper())
-    share += "\nThe correct word was %s." % currentWord
+    share += "\nThe correct word was %s." % currentWord.upper()
     copy(share)
-    print("\nThe correct word was %s." % currentWord)
+    print("\nThe correct word was %s." % currentWord.upper())
 
 
 def saveScore(data, win):
@@ -249,7 +253,7 @@ def saveScore(data, win):
             x = "X"
         else:
             x = len(data)
-        fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord, x)
+        fileWrite += "\n%s %s/6\n---------------------\n" % (currentWord.upper(), x)
         file.write(str(fileWrite))
 
 
