@@ -115,3 +115,4 @@ dmypy.json
 
 scores.txt
 settings.json
+.vscode/settings.json

@@ -5,7 +5,6 @@ from pyperclip import copy
 
 # TODO add docstrings to all functions
 
-
 # constants
 with open("data\\data.csv") as file:
     read = reader(file)
@@ -15,8 +14,8 @@ with open("data\\data.csv") as file:
 
 # admin test vars
 ENABLE_ADMIN_WORD = True
-ADMIN_WORD = "mealy"
-ENABLE_ADMIN_PRINTS = False
+ADMIN_WORD = "ahhhh"
+ENABLE_ADMIN_PRINTS = True
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -37,11 +36,11 @@ def emojiPrint(list):
     returns list if False
 
     Args:
-        list list[int]: list of integers equal to either 0, 1 or 2
+        list list[int]: list of integers equal to either 0, 1, 2, or -1
     """
-    if ENABLE_EMOJI_PRINTS and not ENABLE_ADMIN_PRINTS:
+    if ENABLE_EMOJI_PRINTS:
 
-        emojis = ["⬛", "🟨", "🟩"]
+        emojis = ["⬛", "🟨", "🟩", "❌"]
         string = ""
         for i in list:
             string += emojis[i]
@@ -122,53 +121,72 @@ def wordCheck(word):
     Returns:
         list[ list[int], str ]: 2d list contains, list which contains 5 ints, 5 char string
     """
-    list = []
-
-    for num in range(0, len(word)):
-        adminPrint("\n num %s" % num)
-        letter = word[num]
-        score = 0
-        # check if letter in word
-        if letter in currentWord:
-            adminPrint("%s in %s" % (letter, currentWord))
-            winPos = [char.start() for char in finditer(letter, currentWord)]
-            guessPos = [char.start() for char in finditer(letter, word)]
-            for i in winPos:
-                adminPrint("word[i] %s currentWord[num] %s" % (word[i], currentWord[num]))
-                # check if letter in exact pos
-                if word[num] == currentWord[num]:
-                    adminPrint("%s in %s at pos %s" % (letter, currentWord, i))
-                    score = 2
-                    break
-                # check for dupe letters
-                elif len(guessPos) == 1 and word[i] != currentWord[num]:
-                    adminPrint("%s found but not at pos %s (no dupes)" % (letter, i))
-                    score = 1
-                    break
-                # checks if letter exists in word but in different pos when theres only 1 in word
-                elif len(guessPos) > 1 and word[i] != currentWord[num] and letter not in currentWord:
-                    adminPrint("%s found but not at pos %s (dupes)" % (letter, i))
-                    score = 0
-                    break
+    list = [-1] * 5
+    
+    # grey check
+    adminPrint("###### grey check ###### %s" % list)
+    for i in range(len(word)):
+        adminPrint("word[i] %s : currentWord %s" % (word[i], currentWord))
+        if word[i] not in currentWord:
+            adminPrint("parse")
+            list[i] = 0
+            letterCheck(word, i, 0)
+    
+    # green check
+    adminPrint("###### green check ###### %s" % list)
+    for i in range(len(word)):
+        if list[i] == -1:
+            adminPrint(" word[i] %s \n currentWord[i] %s \n" % (word[i], currentWord[i]))
+            if word[i] == currentWord[i]:
+                list[i] = 2
+                letterCheck(word, i, 2)
+        else: 
+            continue
+    
+    # yellow check
+    adminPrint("###### yellow check ######\n %s" % list)
+    for i in range(len(word)):
+        if list[i] == -1:
+            
+            winPos = [char.start() for char in finditer(word[i], currentWord)]
+            guessPos = [char.start() for char in finditer(word[i], word)]
+            tempGuessPos = guessPos
+            adminPrint("\n win pos %s \n guess pos%s" % (winPos, guessPos))
+            adminPrint(" word[i] %s \n currentWord[i] %s \n i %s \n" % (word[i], currentWord[i], i))
+            
+            if len(guessPos) > 1:
+                adminPrint("parse")
+                if letters[word[i]] == 2:
+                    list[i] = 0
                 else:
-                    score = 1
-        list.append(score)
-    letterCheck(word, list)
+                    for i in range(len(guessPos)):
+                        if i == 0:
+                            value = 1
+                        else:
+                            value = 0
+                        list[guessPos[i]] = value
+                    
+            else:
+                list[i] = 1
+                adminPrint("list[i] = 1")
+        else:
+            continue
+    
+    for i in list:
+        if i == -1:
+            i = 0
+        
+    
+    
     return [list, word]
 
 
 # letter check
-def letterCheck(word, list):
-    """updates state of letters in word with data in list
-
-    Args:
-        word (str): string
-        list (list[int]): list of integers
-    """
-    for i in range(0, len(list)):
-        if list[i] > letters[word[i]]:
-            letters.update({word[i]: list[i]})
-    adminPrint("letters updated %s" % letters)
+def letterCheck(word, pos, value):
+    
+    if value > letters[word[pos]]:
+        letters.update({word[pos]: value})
+    adminPrint("letter %s updated. \n " % (word[pos]))
 
 
 # function to win the game
