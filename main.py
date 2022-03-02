@@ -177,15 +177,18 @@ def yellowCheck(word, list):
                 adminPrint("parse")
                 if letters[word[i]] == 2:
                     list[i] = 0
+                    updateLetter(word, i, 0)
                 else:
-                    for i in range(len(guessPos)):
-                        if i == 0:
+                    for j in range(len(guessPos)):
+                        if j == 0:
                             value = 1
                         else:
                             value = 0
-                        list[guessPos[i]] = value
+                        list[guessPos[j]] = value
+                        updateLetter(word, guessPos[j], value)
             else:
                 list[i] = 1
+                updateLetter(word, i, 1)
                 adminPrint("list[i] = 1")
     return list
 
