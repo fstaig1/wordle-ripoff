@@ -4,6 +4,8 @@ from csv import reader
 from pyperclip import copy
 
 # TODO add docstrings to all functions
+# TODO add comments
+# TODO add web app for UI
 
 # constants
 with open("data\\data.csv") as file:
