@@ -13,9 +13,9 @@ with open("data\\data.csv") as file:
 
 
 # admin test vars
-ENABLE_ADMIN_WORD = True
+ENABLE_ADMIN_WORD = False
 ADMIN_WORD = "ahhhh"
-ENABLE_ADMIN_PRINTS = True
+ENABLE_ADMIN_PRINTS = False
 ENABLE_EMOJI_PRINTS = True
 
 
@@ -122,38 +122,55 @@ def wordCheck(word):
         list[ list[int], str ]: 2d list contains, list which contains 5 ints, 5 char string
     """
     list = [-1] * 5
-    
-    # grey check
+
+    list = greyCheck(word, list)
+
+    list = greenCheck(word, list)
+
+    list = yellowCheck(word, list)
+
+    for i in list:
+        if i == -1:
+            i = 0
+
+    return [list, word]
+
+
+# grey check
+def greyCheck(word, list):
     adminPrint("###### grey check ###### %s" % list)
     for i in range(len(word)):
         adminPrint("word[i] %s : currentWord %s" % (word[i], currentWord))
         if word[i] not in currentWord:
             adminPrint("parse")
             list[i] = 0
-            letterCheck(word, i, 0)
-    
-    # green check
+            updateLetter(word, i, 0)
+    return list
+
+
+# green check
+def greenCheck(word, list):
     adminPrint("###### green check ###### %s" % list)
     for i in range(len(word)):
         if list[i] == -1:
             adminPrint(" word[i] %s \n currentWord[i] %s \n" % (word[i], currentWord[i]))
             if word[i] == currentWord[i]:
                 list[i] = 2
-                letterCheck(word, i, 2)
-        else: 
-            continue
-    
-    # yellow check
+                updateLetter(word, i, 2)
+    return list
+
+
+# yellow check
+def yellowCheck(word, list):
     adminPrint("###### yellow check ######\n %s" % list)
     for i in range(len(word)):
         if list[i] == -1:
-            
+
             winPos = [char.start() for char in finditer(word[i], currentWord)]
             guessPos = [char.start() for char in finditer(word[i], word)]
-            tempGuessPos = guessPos
             adminPrint("\n win pos %s \n guess pos%s" % (winPos, guessPos))
             adminPrint(" word[i] %s \n currentWord[i] %s \n i %s \n" % (word[i], currentWord[i], i))
-            
+
             if len(guessPos) > 1:
                 adminPrint("parse")
                 if letters[word[i]] == 2:
@@ -165,25 +182,14 @@ def wordCheck(word):
                         else:
                             value = 0
                         list[guessPos[i]] = value
-                    
             else:
                 list[i] = 1
                 adminPrint("list[i] = 1")
-        else:
-            continue
-    
-    for i in list:
-        if i == -1:
-            i = 0
-        
-    
-    
-    return [list, word]
+    return list
 
 
-# letter check
-def letterCheck(word, pos, value):
-    
+# letter update
+def updateLetter(word, pos, value):
     if value > letters[word[pos]]:
         letters.update({word[pos]: value})
     adminPrint("letter %s updated. \n " % (word[pos]))
