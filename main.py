@@ -41,7 +41,7 @@ def emojiPrint(list):
         list list[int]: list of integers equal to either 0, 1, 2, or -1
     """
     if ENABLE_EMOJI_PRINTS:
-
+        # in theory its impossible for a -1 to be given but it was during testing so im leaving it here
         emojis = ["⬛", "🟨", "🟩", "❌"]
         string = ""
         for i in list:
@@ -140,6 +140,15 @@ def wordCheck(word):
 
 # grey check
 def greyCheck(word, list):
+    """checks if and letters in word are in currentWord
+
+    Args:
+        word (str): 5 letter string
+        list (list[int]): list of 5 integers
+
+    Returns:
+        list[int]: list of 5 integers
+    """
     adminPrint("###### grey check ###### %s" % list)
     for i in range(len(word)):
         adminPrint(" word[i] : %s \n currentWord %s" % (word[i], currentWord))
@@ -151,6 +160,15 @@ def greyCheck(word, list):
 
 # green check
 def greenCheck(word, list):
+    """checks if any letters in word are in the same position in currentWord
+
+    Args:
+        word (str): 5 letter string
+        list (list[int]): list of 5 integers
+
+    Returns:
+        list[int]: list of 5 integers
+    """
     adminPrint("###### green check ###### %s" % list)
     for i in range(len(word)):
         if list[i] == -1:
@@ -163,6 +181,17 @@ def greenCheck(word, list):
 
 # yellow check
 def yellowCheck(word, list):
+    """checks to see if letters in word are in currentWord, but not in the exact position. \n
+    and also some other checks to make sure the right amount of yellows are in the word. \n
+    its confusing just play the game with dupe letters and you might figure it out
+
+    Args:
+        word (str): 5 letter string
+        list (list[int]): list of 5 integers
+
+    Returns:
+        list[int]: list of 5 integers
+    """
     adminPrint("###### yellow check ######\n %s" % list)
     for i in range(len(word)):
         if list[i] == -1:
@@ -203,6 +232,13 @@ def yellowCheck(word, list):
 
 # letter update
 def updateLetter(word, pos, value):
+    """updates entry word[pos] in letter dict with value
+
+    Args:
+        word (str): 5 letter string
+        pos (int): integer referring to a position in word
+        value (int): integer value to change to
+    """
     adminPrint("\n value : %s \n word[pos] : %s \n" % (value, word[pos]))
     if value > letters[word[pos]]:
         letters.update({word[pos]: value})
