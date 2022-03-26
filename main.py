@@ -5,7 +5,6 @@ from pyperclip import copy
 from os import system
 import configparser
 
-# TODO add docstrings to all functions
 # TODO add comments
 # TODO add web app for UI
 
@@ -15,6 +14,7 @@ with open("data\\data.csv") as file:
     for i in read:
         WORD_LIST = i
 
+# read config file
 cfg = configparser.ConfigParser()
 cfg.read("config.ini")
 
@@ -26,19 +26,19 @@ def adminPrint(data):
     Args:
         data (any): any data to get printed
     """
-    if cfg['DEFAULT'].getboolean('ENABLE_ADMIN_PRINTS') == True:
+    if cfg['DEFAULT'].getboolean('ENABLE_ADMIN_PRINTS'):
         print(data)
 
 
 def emojiPrint(list):
     """function to return scores as emojis
-    returns string of emojis if ENABLE_EMOJI_PRINTS == True
+    returns string of emojis if ENABLE_EMOJI_PRINTS is True
     returns list if False
 
     Args:
         list list[int]: list of integers equal to either 0, 1, 2, or -1
     """
-    if cfg['DEFAULT'].getboolean('ENABLE_EMOJI_PRINTS') == True:
+    if cfg['DEFAULT'].getboolean('ENABLE_EMOJI_PRINTS'):
         # in theory its impossible for a -1 to be given but it was during testing so im leaving it here
         emojis = ["⬛", "🟨", "🟩", "❌"]
         string = ""
@@ -211,7 +211,7 @@ def yellowCheck(word, list):
                                 adminPrint(ii)
                                 list[ii] = 0
                                 updateLetter(word, ii, 0)
-                        else: 
+                        else:
                             list[i] = 0
                     else:
                         for j in range(len(guessPos)):
