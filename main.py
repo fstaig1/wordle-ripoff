@@ -192,7 +192,8 @@ def yellowCheck(word, list):
     """
     adminPrint("###### yellow check ######\n %s" % list)
     for i in range(len(word)):
-        if list[i] == -1:
+        adminPrint("%s ####################################" % list[i])
+        if list[i] == -1 or list[i] == 1:
 
             winPos = [char.start() for char in finditer(word[i], currentWord)]
             guessPos = [char.start() for char in finditer(word[i], word)]
@@ -200,11 +201,18 @@ def yellowCheck(word, list):
             adminPrint(" word[i] : %s \n currentWord[i] %s \n i : %s \n" % (word[i], currentWord[i], i))
 
             if len(guessPos) > 1:
-                adminPrint("parse")
+                adminPrint("parse guesspos>1")
                 if len(winPos) == 1:
                     if letters[word[i]] == 2:
-                        list[i] = 0
-                        updateLetter(word, i, 0)
+                        if winPos[0] not in guessPos:
+                            list[guessPos[0]] = 1
+                            updateLetter(word, guessPos[0], 1)
+                            for ii in guessPos[1:]:
+                                adminPrint(ii)
+                                list[ii] = 0
+                                updateLetter(word, ii, 0)
+                        else: 
+                            list[i] = 0
                     else:
                         for j in range(len(guessPos)):
                             if j == 0:
