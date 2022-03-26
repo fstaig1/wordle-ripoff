@@ -2,6 +2,8 @@ from random import randrange
 from re import finditer
 from csv import reader
 from pyperclip import copy
+from os import system
+import configparser
 
 # TODO add docstrings to all functions
 # TODO add comments
@@ -13,12 +15,8 @@ with open("data\\data.csv") as file:
     for i in read:
         WORD_LIST = i
 
-
-# admin test vars
-ENABLE_ADMIN_WORD = False
-ADMIN_WORD = "ahhhh"
-ENABLE_ADMIN_PRINTS = False
-ENABLE_EMOJI_PRINTS = True
+cfg = configparser.ConfigParser()
+cfg.read("config.ini")
 
 
 # function to print if admin prints are enabled
@@ -28,7 +26,7 @@ def adminPrint(data):
     Args:
         data (any): any data to get printed
     """
-    if ENABLE_ADMIN_PRINTS:
+    if cfg['DEFAULT'].getboolean('ENABLE_ADMIN_PRINTS') == True:
         print(data)
 
 
@@ -40,7 +38,7 @@ def emojiPrint(list):
     Args:
         list list[int]: list of integers equal to either 0, 1, 2, or -1
     """
-    if ENABLE_EMOJI_PRINTS:
+    if cfg['DEFAULT'].getboolean('ENABLE_EMOJI_PRINTS') == True:
         # in theory its impossible for a -1 to be given but it was during testing so im leaving it here
         emojis = ["⬛", "🟨", "🟩", "❌"]
         string = ""
@@ -67,12 +65,12 @@ def initGame():
     global currentWord
     letters = {'a': -1, 'b': -1, 'c': -1, 'd': -1, 'e': -1, 'f': -1, 'g': -1, 'h': -1, 'i': -1, 'j': -1, 'k': -1, 'l': -1, 'm': -1,
                'n': -1, 'o': -1, 'p': -1, 'q': -1, 'r': -1, 's': -1, 't': -1, 'u': -1, 'v': -1, 'w': -1, 'x': -1, 'y': -1, 'z': -1}
-    if not ENABLE_ADMIN_WORD:
+    if not cfg['DEFAULT'].getboolean('ENABLE_ADMIN_WORD'):
         currentWord = generateWord()
         adminPrint("#############  CURRENT WORD - %s  #############" % currentWord.upper())
     else:
-        currentWord = ADMIN_WORD
-        adminPrint("#############  ADMIN WORD - %s  #############" % ADMIN_WORD.upper())
+        currentWord = cfg['DEFAULT']['ADMIN_WORD']
+        adminPrint("#############  ADMIN WORD - %s  #############" % currentWord.upper())
 
 
 # user guessing
@@ -305,6 +303,9 @@ def main():
     while True:
         initGame()
         guessWord()
+
+        input("press enter to play again.")
+        system("cls")
 
 
 main()
