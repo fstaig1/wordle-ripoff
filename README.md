@@ -6,5 +6,5 @@ maybe i'll call it worble
 
 ***
 
-## run main.py to run the CLI version
-gui coming maybe in a year who knows. html sucks
+## run main.py in vscode or you wont beable to see anything 
+ill make a gui one day
